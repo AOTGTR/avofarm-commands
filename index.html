@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>avoFarm — คำสั่ง</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+  :root {
+    --bg:      #0e1013;
+    --panel:   #16191e;
+    --line:    #23272e;
+    --text:    #d7dae0;
+    --dim:     #7d8794;
+    --accent:  #f0a33c;
+    --code:    #8fd3ff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.6 "IBM Plex Sans Thai", system-ui, -apple-system, "Segoe UI", sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; padding: 56px 22px 80px; }
+
+  header { margin-bottom: 44px; }
+  h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: .01em;
+  }
+  h1 span { color: var(--accent); }
+  .sub { margin: 6px 0 0; color: var(--dim); font-size: 14px; }
+
+  h2 {
+    margin: 40px 0 14px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .rows { border-top: 1px solid var(--line); }
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px 20px;
+    align-items: baseline;
+    padding: 13px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  code {
+    font: 500 14px/1.5 "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    color: var(--code);
+    word-break: break-all;
+  }
+  .what { color: var(--dim); font-size: 14px; text-align: right; }
+  .arg { color: var(--dim); }
+
+  .slots { display: grid; gap: 10px; }
+  .slot {
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    gap: 14px;
+    align-items: center;
+    padding: 11px 14px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 7px;
+  }
+  .key {
+    display: grid;
+    place-items: center;
+    height: 30px;
+    border: 1px solid #343a44;
+    border-radius: 5px;
+    font: 500 14px "JetBrains Mono", monospace;
+    color: var(--accent);
+    background: #1b1f25;
+  }
+  .slot p { margin: 0; font-size: 14px; }
+
+  a { color: var(--code); }
+  .note { margin-top: 10px; color: var(--dim); font-size: 13px; }
+  footer {
+    margin-top: 56px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    color: #5c6673;
+    font-size: 12px;
+  }
+
+  @media (max-width: 520px) {
+    .row { grid-template-columns: 1fr; }
+    .what { text-align: left; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <h1>avo<span>Farm</span> — คำสั่ง</h1>
+    <p class="sub">คำสั่งที่คนดูส่งได้ · อัปเดตตามที่มีในเซิร์ฟจริง</p>
+  </header>
+
+  <h2>คนดูส่งได้ — แกล้ง</h2>
+  <div class="rows">
+    <div class="row">
+      <code>/avof prank spawn chicken <span class="arg">&lt;จำนวน&gt; &lt;ความเร็ว&gt; &lt;ข้อความ&gt; &lt;สี&gt;</span></code>
+      <span class="what">ไก่เดินเข้าฟาร์ม กินข้าวเป็นทาง · กินเยอะตัวใหญ่ขึ้น · กินมากอาจระเบิด</span>
+    </div>
+  </div>
+  <p class="note">
+    ใส่แค่ <code>/avof prank spawn chicken</code> ก็ได้ — ได้ 1 ตัว ความเร็วปกติ ไม่มีข้อความ<br>
+    <b>จำนวน</b> 1–100 · <b>ความเร็ว</b> 0.5–6 (1 = ปกติ)<br>
+    <b>ข้อความ</b> ชื่อคนส่ง ขึ้นกลางจอเป็น <code>ชื่อ ส่ง ไก่ x5</code> — <b>ไม่ใส่ก็ไม่ขึ้น</b><br>
+    <b>สี</b> red blue green aqua yellow gold pink purple white gray black — ไม่ใส่ = แดง<br>
+    ส่งซ้ำใน 5 วินาที ตัวเลขจะบวกกัน x5 → x10 → x15
+  </p>
+
+  <h2>คนดูส่งได้ — ช่วย</h2>
+  <div class="rows">
+    <div class="row">
+      <code>/avof prank plant <span class="arg">&lt;ชนิด&gt;</span></code>
+      <span class="what">ปลูกให้เต็มฟาร์ม · ไม่ใส่ชนิด = ข้าวสาลี</span>
+    </div>
+    <div class="row">
+      <code>/avof prank fertilize</code>
+      <span class="what">ใส่ปุยทั้งฟาร์ม ข้าวโตเต็มวัย</span>
+    </div>
+  </div>
+
+  <h2>ในเกม</h2>
+  <div class="slots">
+    <div class="slot">
+      <div class="key">1</div>
+      <p>เมล็ด — วางลงดินเพื่อปลูก หรือกดใส่ต้นที่ปลูกแล้วเพื่อเร่งโต · ใช้ไม่มีวันหมด</p>
+    </div>
+    <div class="slot">
+      <div class="key">5</div>
+      <p>สโนว์บอล — ปาใส่ฟาร์ม ข้าวรอบจุดตกจะโตขึ้น</p>
+    </div>
+    <div class="slot">
+      <div class="key">9</div>
+      <p>หนังสือตั้งค่า — คลิกขวาเปิดเมนู</p>
+    </div>
+  </div>
+  <p class="note">ทั้งสามช่องล็อกไว้ ทิ้งไม่ได้ ย้ายไม่ได้ ตายแล้วไม่หาย</p>
+
+  <h2>วิธีเล่น</h2>
+  <div class="rows">
+    <div class="row">
+      <code>ปลูก → เร่งโต → เต็มฟาร์ม</code>
+      <span class="what">ฟาร์มเต็มเมื่อไหร่ นับถอยหลังแล้วชนะ</span>
+    </div>
+    <div class="row">
+      <code>ชนะแล้วล้างฟาร์ม</code>
+      <span class="what">เริ่มปลูกใหม่รอบต่อไป</span>
+    </div>
+  </div>
+  <p class="note">
+    เมล็ดลงดินเริ่มที่ระดับ 3 · เร่งโต 3 → 5 → เต็ม · ปุย 1 ครั้งเต็มเลย
+  </p>
+
+  <h2>ดูรายการทั้งหมดในเกม</h2>
+  <div class="rows">
+    <div class="row">
+      <code>/avof help</code>
+      <span class="what">คำสั่งทั้งหมด</span>
+    </div>
+    <div class="row">
+      <code>/avof prank</code>
+      <span class="what">รายการแกล้งที่ส่งได้</span>
+    </div>
+  </div>
+
+  <footer>
+    avoFarm Classic · AVOX2 — หน้านี้อัปเดตทุกครั้งที่มีคำสั่งใหม่
+  </footer>
+
+</div>
+</body>
+</html>
