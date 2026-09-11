@@ -114,10 +114,22 @@
   <div class="rows">
     <div class="row">
       <code>/avof prank spawn chicken</code>
-      <span class="what">ไก่เดินเข้าฟาร์ม กินข้าว</span>
+      <span class="what">ไก่</span>
     </div>
     <div class="row">
-      <code>/avof prank spawn chicken 10 2 {user} red</code>
+      <code>/avof prank spawn cow</code>
+      <span class="what">วัว</span>
+    </div>
+    <div class="row">
+      <code>/avof prank spawn sniffer</code>
+      <span class="what">สนิฟเฟอร์</span>
+    </div>
+    <div class="row">
+      <code>/avof prank spawn slime</code>
+      <span class="what">สไลม์</span>
+    </div>
+    <div class="row">
+      <code>/avof prank spawn cow 5 2 {user} red</code>
       <span class="what">แบบใส่ครบทุกค่า</span>
     </div>
   </div>
@@ -125,12 +137,20 @@
   <h2>ช่วย</h2>
   <div class="rows">
     <div class="row">
-      <code>/avof prank plant</code>
-      <span class="what">ปลูกให้เต็มฟาร์ม</span>
+      <code>/avof help till</code>
+      <span class="what">พรวนดินที่พังคืนทั้งหมด</span>
     </div>
     <div class="row">
-      <code>/avof prank fertilize</code>
-      <span class="what">ใส่ปุยทั้งฟาร์ม</span>
+      <code>/avof help till 30 {user} green</code>
+      <span class="what">แบบใส่ครบทุกค่า</span>
+    </div>
+    <div class="row">
+      <code>/avof help tractor</code>
+      <span class="what">รถไถ</span>
+    </div>
+    <div class="row">
+      <code>/avof help tractor 60 {user} green</code>
+      <span class="what">แบบใส่ครบทุกค่า</span>
     </div>
   </div>
 
@@ -138,19 +158,23 @@
   <div class="rows">
     <div class="row">
       <code>จำนวน</code>
-      <span class="what">1–100 · ไม่ใส่ = 1</span>
+      <span class="what">spawn: 1–100 ตัว · ไม่ใส่ = 1 · till: กี่ช่อง · ไม่ใส่ = ทั้งหมด</span>
     </div>
     <div class="row">
       <code>ความเร็ว</code>
-      <span class="what">0.5–6 · ไม่ใส่ = 1</span>
+      <span class="what">spawn: 0.5–6 · ไม่ใส่ = 1</span>
+    </div>
+    <div class="row">
+      <code>วินาที</code>
+      <span class="what">tractor: ไม่ใส่ = 15</span>
     </div>
     <div class="row">
       <code>{user}</code>
-      <span class="what">ขึ้นกลางจอว่า <b>ชื่อคนส่ง ส่ง ไก่ x10</b> · ไม่ใส่ = ไม่ขึ้น</span>
+      <span class="what">ขึ้นกลางจอว่า <b>ชื่อคนส่ง ส่ง ...</b> · ไม่ใส่ = ไม่ขึ้น</span>
     </div>
     <div class="row">
       <code>สี</code>
-      <span class="what">red blue green aqua yellow gold pink purple white gray black · ไม่ใส่ = แดง</span>
+      <span class="what">red blue green aqua yellow gold pink purple white gray black · ไม่ใส่ = แกล้งแดง ช่วยเขียว</span>
     </div>
   </div>
   <p class="note">ใส่ตามลำดับนี้เท่านั้น · จะใส่แค่บางตัวก็ได้ แต่ต้องเรียงจากซ้าย</p>
@@ -164,28 +188,61 @@
   </div>
   <p class="note">ใช้ได้กับทุกคำสั่งที่มีช่องชื่อ · พิมพ์ <code>{user}</code> ไปตรงๆ ได้เลย</p>
 
-  <h2>ไก่</h2>
+  <h2>สัตว์</h2>
   <div class="rows">
     <div class="row">
-      <code>เดินตรงเข้าฟาร์ม</code>
-      <span class="what">กินข้าวทุกต้นที่เดินผ่าน</span>
+      <code>ไก่</code>
+      <span class="what">กินข้าวแถวละช่อง · ตัวใหญ่ขึ้นเรื่อยๆ · กินเยอะอาจระเบิด</span>
     </div>
     <div class="row">
-      <code>กิน 5 ต้น</code>
-      <span class="what">ตัวใหญ่ขึ้น เลือดเยอะขึ้น</span>
+      <code>วัว</code>
+      <span class="what">กินกว้าง 2 แถว · ตัวใหญ่ขึ้นเรื่อยๆ</span>
     </div>
     <div class="row">
-      <code>กิน 25–40 ต้น</code>
-      <span class="what">อาจระเบิด ข้าวรอบตัวหายเป็นวง</span>
+      <code>สนิฟเฟอร์</code>
+      <span class="what">กินกว้าง 3 แถว · ตัวใหญ่ขึ้นเรื่อยๆ</span>
+    </div>
+    <div class="row">
+      <code>สไลม์</code>
+      <span class="what">กระโดดทับตรงไหน ดินพัง 4×4 · ต้องพรวนใหม่ถึงปลูกได้</span>
     </div>
   </div>
-  <p class="note">ส่งซ้ำใน 5 วินาที ตัวเลขบวกกัน x10 → x20 → x30</p>
+  <p class="note">ออกคนละแถวไม่ทับกัน · ส่งซ้ำใน 5 วินาที ตัวเลขบวกกัน x10 → x20 → x30</p>
+
+  <h2>รถไถ</h2>
+  <div class="rows">
+    <div class="row">
+      <code>คลิกขวา</code>
+      <span class="what">ขึ้นรถ · Shift ลง</span>
+    </div>
+    <div class="row">
+      <code>W / S</code>
+      <span class="what">เดินหน้า / ถอย · Ctrl + W เร่งแรง</span>
+    </div>
+    <div class="row">
+      <code>หันจอ</code>
+      <span class="what">เลี้ยวตามทิศที่มอง · เปลี่ยนเป็น A/D ได้ในหนังสือช่อง 9</span>
+    </div>
+    <div class="row">
+      <code>ในฟาร์ม</code>
+      <span class="what">คันไถลง ไถดิน 3×3 · เวลานับถอยหลัง</span>
+    </div>
+    <div class="row">
+      <code>นอกฟาร์ม</code>
+      <span class="what">คันไถยก · เวลาหยุด</span>
+    </div>
+  </div>
+  <p class="note">มีคันเดียว ส่งซ้ำ = เวลาเพิ่ม · เวลาหมดรถหาย</p>
 
   <h2>ช่องของในเกม</h2>
   <div class="slots">
     <div class="slot">
       <div class="key">1</div>
       <p>เมล็ด — วางลงดินเพื่อปลูก กดใส่ต้นที่ปลูกแล้วเพื่อเร่งโต</p>
+    </div>
+    <div class="slot">
+      <div class="key">3</div>
+      <p>จอบทอง — พรวนดินที่สไลม์พังให้ปลูกได้อีก</p>
     </div>
     <div class="slot">
       <div class="key">5</div>
@@ -207,6 +264,10 @@
     <div class="row">
       <code>เร่งโต</code>
       <span class="what">3 → 5 → เต็ม · ปุยครั้งเดียวเต็มเลย</span>
+    </div>
+    <div class="row">
+      <code>ดินพัง</code>
+      <span class="what">พรวนด้วยจอบช่อง 3 หรือขับรถไถทับ</span>
     </div>
     <div class="row">
       <code>เต็มฟาร์ม</code>
