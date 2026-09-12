@@ -1,68 +1,146 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>avoFarm — คำสั่ง</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>">
 <style>
+  /* Dark only, on purpose: viewers keep this open all night. No light-mode
+     media query - one theme, easy on the eyes. */
   :root {
-    --bg:      #0e1013;
-    --panel:   #16191e;
-    --line:    #23272e;
-    --text:    #d7dae0;
-    --dim:     #7d8794;
-    --accent:  #f0a33c;
-    --code:    #8fd3ff;
+    --bg: #0d0f12;
+    --panel: #14171d;
+    --panel-2: #1b1f27;
+    --line: #262b34;
+    --text: #e8eaef;
+    --dim: #9aa3b2;
+    --help: #4ade80;
+    --prank: #f87171;
+    --set: #60a5fa;
+    --accent: #fbbf24;
+    --radius: 12px;
   }
   * { box-sizing: border-box; }
   body {
     margin: 0;
     background: var(--bg);
     color: var(--text);
-    font: 16px/1.6 "IBM Plex Sans Thai", system-ui, -apple-system, "Segoe UI", sans-serif;
+    font-family: "Segoe UI", "Noto Sans Thai", system-ui, -apple-system, sans-serif;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
-  .wrap { max-width: 640px; margin: 0 auto; padding: 56px 22px 80px; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 28px 18px 80px; }
 
-  header { margin-bottom: 44px; }
+  header { margin-bottom: 22px; }
   h1 {
-    margin: 0;
-    font-size: 26px;
-    font-weight: 600;
-    letter-spacing: .01em;
+    font-size: clamp(26px, 5vw, 38px);
+    margin: 0 0 6px;
+    letter-spacing: -0.4px;
   }
   h1 span { color: var(--accent); }
-  .sub { margin: 6px 0 0; color: var(--dim); font-size: 14px; }
+  .sub { color: var(--dim); margin: 0; font-size: 15px; }
 
-  h2 {
-    margin: 40px 0 14px;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: .16em;
-    text-transform: uppercase;
+  /* ── search ─────────────────────────────────────────────── */
+  .searchbox { position: relative; margin: 22px 0 14px; }
+  #q {
+    width: 100%;
+    padding: 14px 46px 14px 44px;
+    font-size: 17px;
+    font-family: inherit;
+    color: var(--text);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    outline: none;
+  }
+  #q:focus { border-color: var(--accent); }
+  #q::placeholder { color: var(--dim); }
+  .searchbox .icon {
+    position: absolute; left: 15px; top: 50%; transform: translateY(-50%);
+    color: var(--dim); font-size: 17px; pointer-events: none;
+  }
+  #ghost {
+    position: absolute; left: 0; top: 0;
+    width: 100%;
+    padding: 14px 46px 14px 44px;
+    font-size: 17px;
+    font-family: inherit;
+    color: transparent;
+    pointer-events: none;
+    white-space: pre;
+    overflow: hidden;
+    border: 1px solid transparent;
+  }
+  #ghost b { color: var(--dim); font-weight: normal; }
+  .tabhint {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    font-size: 11px; color: var(--dim);
+    border: 1px solid var(--line); border-radius: 6px;
+    padding: 2px 7px;
+    background: var(--panel-2);
+  }
+
+  /* ── filter chips ───────────────────────────────────────── */
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+  .chip {
+    font: inherit; font-size: 14px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--panel);
     color: var(--dim);
+    cursor: pointer;
   }
+  .chip:hover { color: var(--text); }
+  .chip.on { color: #0d0f12; border-color: transparent; font-weight: 600; }
+  .chip.on[data-cat="all"]   { background: var(--accent); }
+  .chip.on[data-cat="help"]  { background: var(--help); }
+  .chip.on[data-cat="prank"] { background: var(--prank); }
+  .chip.on[data-cat="set"]   { background: var(--set); }
 
-  .rows { border-top: 1px solid var(--line); }
+  /* ── groups + rows ──────────────────────────────────────── */
+  .group { margin-bottom: 26px; }
+  .group h2, .extra h2 {
+    font-size: 15px; letter-spacing: 1.4px; text-transform: uppercase;
+    margin: 0 0 10px; padding-left: 2px;
+  }
+  .group[data-cat="help"]  h2 { color: var(--help); }
+  .group[data-cat="prank"] h2 { color: var(--prank); }
+  .group[data-cat="set"]   h2 { color: var(--set); }
+  .extra h2 { color: var(--dim); }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
   .row {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 6px 20px;
-    align-items: baseline;
-    padding: 13px 0;
-    border-bottom: 1px solid var(--line);
+    display: flex; align-items: baseline; gap: 14px;
+    padding: 12px 16px;
+    border-top: 1px solid var(--line);
+    cursor: pointer;
   }
-  code {
-    font: 500 14px/1.5 "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-    color: var(--code);
-    word-break: break-all;
+  .row:first-child { border-top: none; }
+  .row:hover { background: var(--panel-2); }
+  .row.copied { background: rgba(251,191,36,.14); }
+  .cmd {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: 15px;
+    white-space: nowrap;
+    flex: 0 0 auto;
   }
-  .what { color: var(--dim); font-size: 14px; text-align: right; }
-  .arg { color: var(--dim); }
+  .group[data-cat="help"]  .cmd { color: var(--help); }
+  .group[data-cat="prank"] .cmd { color: var(--prank); }
+  .group[data-cat="set"]   .cmd { color: var(--set); }
+  .cmd .arg { color: var(--dim); }
+  .desc { color: var(--dim); font-size: 14px; flex: 1 1 auto; }
+  .gnote { color: var(--dim); font-size: 13px; margin: 8px 2px 0; }
+  mark { background: rgba(251,191,36,.3); color: inherit; border-radius: 3px; padding: 0 2px; }
 
+  /* ── hotbar, shown when nothing is being searched ───────── */
+  .extra { margin-bottom: 26px; }
   .slots { display: grid; gap: 10px; }
   .slot {
     display: grid;
@@ -72,33 +150,35 @@
     padding: 11px 14px;
     background: var(--panel);
     border: 1px solid var(--line);
-    border-radius: 7px;
+    border-radius: var(--radius);
   }
   .key {
-    display: grid;
-    place-items: center;
+    display: grid; place-items: center;
     height: 30px;
-    border: 1px solid #343a44;
-    border-radius: 5px;
-    font: 500 14px "JetBrains Mono", monospace;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
     color: var(--accent);
-    background: #1b1f25;
+    background: var(--panel-2);
   }
   .slot p { margin: 0; font-size: 14px; }
 
-  a { color: var(--code); }
-  .note { margin-top: 10px; color: var(--dim); font-size: 13px; }
-  footer {
-    margin-top: 56px;
-    padding-top: 18px;
-    border-top: 1px solid var(--line);
-    color: #5c6673;
-    font-size: 12px;
+  .empty { color: var(--dim); padding: 30px 4px; text-align: center; }
+  .note {
+    margin-top: 30px; padding: 14px 16px;
+    background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+    color: var(--dim); font-size: 14px;
   }
+  .note b { color: var(--text); font-weight: 600; }
+  code {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    font-size: .95em;
+  }
+  footer { margin-top: 34px; color: var(--dim); font-size: 13px; text-align: center; }
 
-  @media (max-width: 520px) {
-    .row { grid-template-columns: 1fr; }
-    .what { text-align: left; }
+  @media (max-width: 620px) {
+    .row { flex-direction: column; gap: 3px; }
+    .cmd { white-space: normal; }
   }
 </style>
 </head>
@@ -106,230 +186,168 @@
 <div class="wrap">
 
   <header>
-    <h1>avo<span>Farm</span> — คำสั่ง</h1>
-    <p class="sub">คำสั่งที่คนดูส่งได้</p>
+    <h1>🌾 avo<span>Farm</span> — คำสั่ง</h1>
+    <p class="sub">พิมพ์ค้นหา แล้วกด <b>Tab</b> เพื่อเติมคำสั่งอัตโนมัติ · คลิกคำสั่งเพื่อคัดลอก</p>
   </header>
 
-  <h2>แกล้ง</h2>
-  <div class="rows">
-    <div class="row">
-      <code>/avof prank spawn chicken</code>
-      <span class="what">ไก่</span>
-    </div>
-    <div class="row">
-      <code>/avof prank spawn cow</code>
-      <span class="what">วัว</span>
-    </div>
-    <div class="row">
-      <code>/avof prank spawn sniffer</code>
-      <span class="what">สนิฟเฟอร์</span>
-    </div>
-    <div class="row">
-      <code>/avof prank spawn slime</code>
-      <span class="what">สไลม์</span>
-    </div>
-    <div class="row">
-      <code>/avof prank spawn cow 5 2 {user} red</code>
-      <span class="what">แบบใส่ครบทุกค่า</span>
-    </div>
-    <div class="row">
-      <code>/avof prank tractor</code>
-      <span class="what">ลดเวลารถไถ · เหลือ 0 = รถพัง</span>
-    </div>
-    <div class="row">
-      <code>/avof prank tractor 30 {user} red</code>
-      <span class="what">แบบใส่ครบทุกค่า</span>
-    </div>
-    <div class="row">
-      <code>/avof prank combine</code>
-      <span class="what">รถเกี่ยว — เกี่ยวข้าวทิ้งทั่วฟาร์ม · มาทีละคันเป็นคิว</span>
-    </div>
-    <div class="row">
-      <code>/avof prank combine {user} red</code>
-      <span class="what">แบบใส่ครบทุกค่า · คนเดิมส่งซ้ำขึ้น x2</span>
-    </div>
+  <div class="searchbox">
+    <span class="icon">🔍</span>
+    <div id="ghost"></div>
+    <input id="q" type="text" placeholder="ค้นหาคำสั่ง เช่น วัว, รถไถ, รถเกี่ยว, พรวน…" autocomplete="off" spellcheck="false">
+    <span class="tabhint">Tab</span>
   </div>
 
-  <h2>ช่วย</h2>
-  <div class="rows">
-    <div class="row">
-      <code>/avof help till</code>
-      <span class="what">พรวนดินที่พังคืนทั้งหมด</span>
-    </div>
-    <div class="row">
-      <code>/avof help till 30 {user} green</code>
-      <span class="what">แบบใส่ครบทุกค่า</span>
-    </div>
-    <div class="row">
-      <code>/avof help tractor</code>
-      <span class="what">รถไถ</span>
-    </div>
-    <div class="row">
-      <code>/avof help tractor 60 {user} green</code>
-      <span class="what">แบบใส่ครบทุกค่า</span>
-    </div>
+  <div class="chips" id="chips">
+    <button class="chip on" data-cat="all">ทั้งหมด</button>
+    <button class="chip" data-cat="help">ช่วย</button>
+    <button class="chip" data-cat="prank">แกล้ง</button>
+    <button class="chip" data-cat="set">ตั้งค่า</button>
   </div>
 
-  <h2>ค่าที่ใส่ได้</h2>
-  <div class="rows">
-    <div class="row">
-      <code>จำนวน</code>
-      <span class="what">spawn: 1–100 ตัว · ไม่ใส่ = 1 · till: กี่ช่อง · ไม่ใส่ = ทั้งหมด</span>
-    </div>
-    <div class="row">
-      <code>ความเร็ว</code>
-      <span class="what">spawn: 0.5–6 · ไม่ใส่ = 1</span>
-    </div>
-    <div class="row">
-      <code>วินาที</code>
-      <span class="what">tractor: ไม่ใส่ = 15</span>
-    </div>
-    <div class="row">
-      <code>{user}</code>
-      <span class="what">ขึ้นกลางจอว่า <b>ชื่อคนส่ง ส่ง ...</b> · ไม่ใส่ = ไม่ขึ้น</span>
-    </div>
-    <div class="row">
-      <code>สี</code>
-      <span class="what">red blue green aqua yellow gold pink purple white gray black · ไม่ใส่ = แกล้งแดง ช่วยเขียว</span>
-    </div>
-  </div>
-  <p class="note">ใส่ตามลำดับนี้เท่านั้น · จะใส่แค่บางตัวก็ได้ แต่ต้องเรียงจากซ้าย</p>
+  <div id="list"></div>
 
-  <h2>{user} คืออะไร</h2>
-  <div class="rows">
-    <div class="row">
-      <code>{user}</code>
-      <span class="what">ชื่อคนส่งกิฟ · ระบบเติมให้เอง ไม่ต้องพิมพ์ชื่อจริง</span>
-    </div>
-  </div>
-  <p class="note">ใช้ได้กับทุกคำสั่งที่มีช่องชื่อ · พิมพ์ <code>{user}</code> ไปตรงๆ ได้เลย</p>
-
-  <h2>สัตว์</h2>
-  <div class="rows">
-    <div class="row">
-      <code>ไก่</code>
-      <span class="what">กินข้าวแถวละช่อง · ตัวใหญ่ขึ้นเรื่อยๆ · กินเยอะอาจระเบิด</span>
-    </div>
-    <div class="row">
-      <code>วัว</code>
-      <span class="what">กินกว้าง 2 แถว · ตัวใหญ่ขึ้นเรื่อยๆ</span>
-    </div>
-    <div class="row">
-      <code>สนิฟเฟอร์</code>
-      <span class="what">กินกว้าง 3 แถว · ตัวใหญ่ขึ้นเรื่อยๆ</span>
-    </div>
-    <div class="row">
-      <code>สไลม์</code>
-      <span class="what">กระโดดทับตรงไหน ดินพัง 4×4 · ต้องพรวนใหม่ถึงปลูกได้</span>
-    </div>
-  </div>
-  <p class="note">ออกคนละแถวไม่ทับกัน · ส่งซ้ำใน 5 วินาที ตัวเลขบวกกัน x10 → x20 → x30</p>
-
-  <h2>รถไถ</h2>
-  <div class="rows">
-    <div class="row">
-      <code>คลิกขวา</code>
-      <span class="what">ขึ้นรถ · Shift ลง</span>
-    </div>
-    <div class="row">
-      <code>W / S</code>
-      <span class="what">เดินหน้า / ถอย · Ctrl + W เร่งแรง</span>
-    </div>
-    <div class="row">
-      <code>หันจอ</code>
-      <span class="what">เลี้ยวตามทิศที่มอง · เปลี่ยนเป็น A/D ได้ในหนังสือช่อง 9</span>
-    </div>
-    <div class="row">
-      <code>ในฟาร์ม</code>
-      <span class="what">คันไถลง ไถดิน 3×3 · เวลานับถอยหลัง</span>
-    </div>
-    <div class="row">
-      <code>นอกฟาร์ม</code>
-      <span class="what">คันไถยก · เวลาหยุด</span>
-    </div>
-  </div>
-  <p class="note">มีคันเดียว ส่งซ้ำ = เวลาเพิ่ม · ส่งทีไรมีเสียง + แถบล่างบอกเวลารวม · เวลาหมดรถพังกระจายเป็นชิ้น</p>
-
-  <h2>รถเกี่ยว</h2>
-  <div class="rows">
-    <div class="row">
-      <code>ส่งแล้วเกิดเลย</code>
-      <span class="what">ขับเอง วิ่งเก็บทั้งฟาร์ม 3 เลน ~13 วินาที แล้วออกไป</span>
-    </div>
-    <div class="row">
-      <code>เกี่ยวกว้าง 7</code>
-      <span class="what">ข้าวทุกระยะหายหมด · ดินยังพรวนอยู่ ปลูกใหม่ได้ทันที</span>
-    </div>
-    <div class="row">
-      <code>มาทีละคัน</code>
-      <span class="what">ส่งพร้อมกันหลายคัน = ต่อคิว · คันต่อไปมาเองหลังคันก่อนเสร็จ</span>
-    </div>
-    <div class="row">
-      <code>ชื่อคนส่ง</code>
-      <span class="what">ขึ้นตอนคันนั้นเริ่มวิ่ง · คนเดิมส่งซ้ำขึ้น x2 x3</span>
-    </div>
-  </div>
-  <p class="note">แถบล่างบอกจำนวนที่เหลือในคิว <b>+3 รถเกี่ยว</b> รวมทุกคน · เสร็จ 1 คันลดเป็น +2</p>
-
-  <h2>ช่องของในเกม</h2>
-  <div class="slots">
-    <div class="slot">
-      <div class="key">1</div>
-      <p>เมล็ด — วางลงดินเพื่อปลูก กดใส่ต้นที่ปลูกแล้วเพื่อเร่งโต</p>
-    </div>
-    <div class="slot">
-      <div class="key">3</div>
-      <p>จอบทอง — พรวนดินที่สไลม์พังให้ปลูกได้อีก</p>
-    </div>
-    <div class="slot">
-      <div class="key">5</div>
-      <p>สโนว์บอล — ปาใส่ฟาร์ม ข้าวรอบจุดตกโตขึ้น</p>
-    </div>
-    <div class="slot">
-      <div class="key">9</div>
-      <p>หนังสือ — คลิกขวาเปิดเมนูตั้งค่า</p>
-    </div>
-  </div>
-  <p class="note">ล็อกไว้ ทิ้งไม่ได้ ย้ายไม่ได้ ตายแล้วไม่หาย</p>
-
-  <h2>วิธีเล่น</h2>
-  <div class="rows">
-    <div class="row">
-      <code>ปลูก</code>
-      <span class="what">เมล็ดลงดินเริ่มที่ระดับ 3</span>
-    </div>
-    <div class="row">
-      <code>เร่งโต</code>
-      <span class="what">3 → 5 → เต็ม · ปุยครั้งเดียวเต็มเลย</span>
-    </div>
-    <div class="row">
-      <code>ดินพัง</code>
-      <span class="what">พรวนด้วยจอบช่อง 3 หรือขับรถไถทับ</span>
-    </div>
-    <div class="row">
-      <code>เต็มฟาร์ม</code>
-      <span class="what">นับถอยหลังแล้วชนะ · ชนะแล้วล้างฟาร์มเริ่มใหม่</span>
-    </div>
-    <div class="row">
-      <code>ป้ายไฟ</code>
-      <span class="what">ป้ายเลขข้างฟาร์มติดตอนนับถอยหลัง · ชนะแล้วดับ</span>
-    </div>
+  <div id="extras">
+    <section class="extra">
+      <h2>ไอเทมในช่อง</h2>
+      <div class="slots">
+        <div class="slot"><span class="key">1</span><p>เมล็ด — ปลูกข้าว</p></div>
+        <div class="slot"><span class="key">3</span><p>จอบทอง — พรวนดินที่พัง</p></div>
+        <div class="slot"><span class="key">5</span><p>สโนบอล — ปาใส่ฟาร์ม ข้าวขึ้น</p></div>
+        <div class="slot"><span class="key">9</span><p>หนังสือ — คลิกขวาเปิดเมนู</p></div>
+      </div>
+      <p class="gnote">ล็อกไว้ ทิ้ง/ย้ายไม่ได้ ตายแล้วไม่หาย</p>
+    </section>
   </div>
 
-  <h2>ดูในเกม</h2>
-  <div class="rows">
-    <div class="row">
-      <code>/avof help</code>
-      <span class="what">คำสั่งทั้งหมด</span>
-    </div>
-    <div class="row">
-      <code>/avof prank</code>
-      <span class="what">รายการแกล้ง</span>
-    </div>
+  <div class="note">
+    <b>เลขท้ายไม่ใส่ก็ได้</b> — แต่ละคำสั่งมีค่าเริ่มต้น ·
+    <code>[ชื่อ]</code> = ชื่อคนส่ง ขึ้นกลางจอ · <code>[สี]</code> = red blue green… ·
+    ส่งซ้ำใน 5 วิ ตัวเลขบวกกัน · สั่งจากคอนโซลได้ ไม่ต้องใส่ชื่อผู้เล่น
   </div>
 
-  <footer>avoFarm Classic · AVOX2</footer>
-
+  <footer>avoFarm · Minecraft 1.21.11 · AVOX2</footer>
 </div>
+
+<script>
+const DATA = [
+  { cat: "prank", title: "แกล้งสตรีมเมอร์", items: [
+    { cmd: "/avof prank spawn chicken", arg: "[n] [เร็ว] [ชื่อ] [สี]", desc: "เสกไก่" },
+    { cmd: "/avof prank spawn cow",     arg: "[n] [เร็ว] [ชื่อ] [สี]", desc: "เสกวัว" },
+    { cmd: "/avof prank spawn sniffer", arg: "[n] [เร็ว] [ชื่อ] [สี]", desc: "เสกสนิฟเฟอร์" },
+    { cmd: "/avof prank spawn slime",   arg: "[n] [เร็ว] [ชื่อ] [สี]", desc: "เสกสไลม์ · พังดิน" },
+    { cmd: "/avof prank tractor",       arg: "[วิ] [ชื่อ] [สี]",       desc: "ลดเวลารถไถ · เหลือ 0 = พัง" },
+    { cmd: "/avof prank combine",       arg: "[ชื่อ] [สี]",            desc: "รถเกี่ยว · เกี่ยวข้าวทิ้ง" },
+  ]},
+  { cat: "help", title: "ช่วยสตรีมเมอร์", items: [
+    { cmd: "/avof help till",    arg: "[n] [ชื่อ] [สี]", desc: "พรวนดินที่พัง" },
+    { cmd: "/avof help tractor", arg: "[วิ] [ชื่อ] [สี]", desc: "เสกรถไถ" },
+  ]},
+  { cat: "set", title: "ตั้งค่า", items: [
+    { cmd: "/avof setting",        arg: "",           desc: "เปิดเมนู (เหมือนหนังสือช่อง 9)" },
+    { cmd: "/avof setting time",   arg: "[วิ]",        desc: "เวลานับถอยหลังก่อนชนะ" },
+    { cmd: "/avof setting world",  arg: "[1|2]",      desc: "สลับโลก · ย้ายทุกคน" },
+    { cmd: "/avof setting drive",  arg: "[look|wasd]", desc: "โหมดขับรถไถ" },
+    { cmd: "/avof setting reset",  arg: "",           desc: "ล้างฟาร์ม เหลือดินเปล่า" },
+    { cmd: "/avof setting hoe",    arg: "on|off",     desc: "จอบช่อง 3" },
+    { cmd: "/avof setting snow",   arg: "on|off",     desc: "สโนบอลช่อง 5" },
+    { cmd: "/avof setting seed",   arg: "on|off",     desc: "เมล็ดช่อง 1" },
+  ]},
+];
+
+const ALL  = DATA.flatMap(g => g.items.map(i => ({ ...i, cat: g.cat })));
+const POOL = ALL.map(i => i.cmd);          // what Tab completes against
+
+const listEl   = document.getElementById("list");
+const extrasEl = document.getElementById("extras");
+const qEl      = document.getElementById("q");
+const ghostEl  = document.getElementById("ghost");
+let cat = "all";
+
+const esc = s => s.replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+
+/** Marks the first match, escaped piece by piece so a "<" or "&" lines up. */
+function hl(text, term) {
+  if (!term) return esc(text);
+  const i = text.toLowerCase().indexOf(term.toLowerCase());
+  if (i < 0) return esc(text);
+  return esc(text.slice(0, i)) + "<mark>" + esc(text.slice(i, i + term.length)) + "</mark>"
+       + esc(text.slice(i + term.length));
+}
+
+function render() {
+  const term = qEl.value.trim();
+  const low = term.toLowerCase();
+  let shown = 0;
+  listEl.innerHTML = DATA.map(g => {
+    if (cat !== "all" && cat !== g.cat) return "";
+    const rows = g.items.filter(i =>
+      !low || (i.cmd + " " + i.arg + " " + i.desc).toLowerCase().includes(low));
+    if (!rows.length) return "";
+    shown += rows.length;
+    return `<section class="group" data-cat="${g.cat}">
+      <h2>${esc(g.title)}</h2>
+      <div class="card">${rows.map(i => `
+        <div class="row" data-copy="${esc(i.cmd)}">
+          <span class="cmd">${hl(i.cmd, term)} <span class="arg">${esc(i.arg)}</span></span>
+          <span class="desc">${hl(i.desc, term)}</span>
+        </div>`).join("")}</div>
+      ${g.note && !low ? `<p class="gnote">${esc(g.note)}</p>` : ""}
+    </section>`;
+  }).join("");
+  if (!shown) listEl.innerHTML = `<div class="empty">ไม่พบคำสั่งที่ตรงกับ “${esc(term)}”</div>`;
+  extrasEl.hidden = !!low || cat !== "all";
+  drawGhost();
+}
+
+/** The first command that starts with what has been typed - what Tab accepts. */
+function suggestion() {
+  const v = qEl.value;
+  if (!v || v !== v.trimStart()) return null;
+  const hit = POOL.find(c => c.toLowerCase().startsWith(v.toLowerCase()) && c.length > v.length);
+  return hit || null;
+}
+
+function drawGhost() {
+  const s = suggestion();
+  ghostEl.innerHTML = s ? esc(qEl.value) + "<b>" + esc(s.slice(qEl.value.length)) + "</b>" : "";
+}
+
+qEl.addEventListener("input", render);
+qEl.addEventListener("keydown", e => {
+  if (e.key === "Tab") {
+    const s = suggestion();
+    if (s) { e.preventDefault(); qEl.value = s; render(); }
+  } else if (e.key === "ArrowRight" && qEl.selectionStart === qEl.value.length) {
+    const s = suggestion();
+    if (s) { qEl.value = s; render(); }
+  } else if (e.key === "Escape") {
+    qEl.value = ""; render();
+  }
+});
+
+document.getElementById("chips").addEventListener("click", e => {
+  const b = e.target.closest(".chip");
+  if (!b) return;
+  cat = b.dataset.cat;
+  document.querySelectorAll(".chip").forEach(c => c.classList.toggle("on", c === b));
+  render();
+});
+
+listEl.addEventListener("click", e => {
+  const row = e.target.closest(".row");
+  if (!row) return;
+  navigator.clipboard?.writeText(row.dataset.copy);
+  row.classList.add("copied");
+  setTimeout(() => row.classList.remove("copied"), 400);
+});
+
+// "/" anywhere jumps to the search box, like a real console.
+document.addEventListener("keydown", e => {
+  if (e.key === "/" && document.activeElement !== qEl) { e.preventDefault(); qEl.focus(); }
+});
+
+render();
+qEl.focus();
+</script>
 </body>
 </html>
